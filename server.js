@@ -11,6 +11,9 @@ const io = new Server(httpserver, {
   },
 });
 
+let synchronised_board_state;
+let winner = null
+
 app.get("/", (req, res) => {
   res.send("<h1>Hello</h1>");
 });
@@ -19,6 +22,11 @@ io.on("connection", (Socket) => {
   console.log(Socket.id + " connected");
   Socket.on("disconnect",()=>{
     console.log(Socket.id + " disconneted")
+  })
+  Socket.on("board_state_update", (board_state)=>{
+    console.log(board_state)
+    synchronised_board_state=board_state
+    Socket.broadcast.emit("sync_board_state", synchronised_board_state)
   })
 });
 
