@@ -76,6 +76,7 @@ io.on("connection", (Socket) => {
       if (winner) {
         board_states[assigned_room]["winnings"][symbol] =
           board_states[assigned_room]["winnings"][symbol] + 1;
+          io.to[assigned_room].emit("score_count", board_states[assigned_room]["winnings"] )
       }
       io.to(assigned_room).emit(
         "sync_board_state",
@@ -116,6 +117,7 @@ io.on("connection", (Socket) => {
       symbol = symbol_selected;
       Socket.to(assigned_room).emit("competitor_name", player_name);
       io.to(assigned_room).emit("Ready", true);
+      io.to[assigned_room].emit("score_count", board_states[assigned_room]["winnings"])
       return;
     }
     available_players.push({
