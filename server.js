@@ -1,4 +1,3 @@
-const { Console } = require("console");
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
