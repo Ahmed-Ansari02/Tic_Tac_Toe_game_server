@@ -100,7 +100,7 @@ io.on("connection", (Socket) => {
         assigned_room = element;
       });
       symbol = symbol_selected;
-      socket.to(assigned_room).emit("competitor_name",player_name)
+      Socket.to(assigned_room).emit("competitor_name",player_name)
       io.to(assigned_room).emit("Ready", true);
       return;
     }
