@@ -74,7 +74,7 @@ io.on("connection", (Socket) => {
       board_states[assigned_room].board[id] = symbol;
       winner = calculate_winner(board_states[assigned_room].board);
       if (winner){
-        board_states[assigned_room][winnings][symbol]=board_states[assigned_room][winnings][symbol]+1
+        board_states[assigned_room]["winnings"][symbol]=board_states[assigned_room]["winnings"][symbol]+1
       }
       io.to(assigned_room).emit(
         "sync_board_state",
