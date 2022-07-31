@@ -64,7 +64,7 @@ io.on("connection", (Socket) => {
     available_players = available_players.filter(
       (value) => value.room_id !== Socket.id
     );
-    console.log(available_players,board_states);
+    console.log(available_players, board_states);
     io.to(assigned_room).emit("Ready", false);
     io.emit("available_players", available_players);
   });
@@ -73,8 +73,9 @@ io.on("connection", (Socket) => {
     if (io.sockets.adapter.rooms.get(assigned_room).size === 2) {
       board_states[assigned_room].board[id] = symbol;
       winner = calculate_winner(board_states[assigned_room].board);
-      if (winner){
-        board_states[assigned_room]["winnings"][symbol]=board_states[assigned_room]["winnings"][symbol]+1
+      if (winner) {
+        board_states[assigned_room]["winnings"][symbol] =
+          board_states[assigned_room]["winnings"][symbol] + 1;
       }
       io.to(assigned_room).emit(
         "sync_board_state",
@@ -89,16 +90,16 @@ io.on("connection", (Socket) => {
     Socket.emit("sync_board_state", "wait for players");
   });
 
-  Socket.on("rematch_req",()=>{
-    board_states[assigned_room].board=new Array(9).fill(null)
-    winner=false
+  Socket.on("rematch_req", () => {
+    board_states[assigned_room].board = new Array(9).fill(null);
+    winner = false;
     io.to(assigned_room).emit(
       "sync_board_state",
-      board_states[assigned_room],
+      board_states[assigned_room].board,
       winner,
       symbol
     );
-  })
+  });
 
   Socket.on("update_players", (player_name, room_id, symbol_selected) => {
     if (available_players.length !== 0) {
@@ -113,7 +114,7 @@ io.on("connection", (Socket) => {
         assigned_room = element;
       });
       symbol = symbol_selected;
-      Socket.to(assigned_room).emit("competitor_name",player_name)
+      Socket.to(assigned_room).emit("competitor_name", player_name);
       io.to(assigned_room).emit("Ready", true);
       return;
     }
@@ -126,7 +127,10 @@ io.on("connection", (Socket) => {
 
     Socket.rooms.forEach((element) => {
       assigned_room = element;
-      board_states[assigned_room] = {board: new Array(9).fill(null), winnings:{"X":0, "O":0}}
+      board_states[assigned_room] = {
+        board: new Array(9).fill(null),
+        winnings: { X: 0, O: 0 },
+      };
       console.log("in room " + assigned_room);
     });
 
