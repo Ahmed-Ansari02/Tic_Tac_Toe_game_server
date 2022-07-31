@@ -23,7 +23,7 @@
   "homepage": "https://github.com/Ahmed-Ansari02/tic_tac_toe_game_server#readme",
   "description": "",
   "engines": {
-    "node": "18.x"
+    "node": "18.2.0"
   }
 
 }
