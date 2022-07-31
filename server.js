@@ -96,11 +96,11 @@ io.on("connection", (Socket) => {
       available_players = available_players.filter(
         (value) => value.room_id !== room_id
       );
-
       Socket.rooms.forEach((element) => {
         assigned_room = element;
       });
       symbol = symbol_selected;
+      socket.to(assigned_room).emit("competitor_name",player_name)
       io.to(assigned_room).emit("Ready", true);
       return;
     }
