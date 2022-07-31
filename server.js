@@ -86,6 +86,17 @@ io.on("connection", (Socket) => {
     Socket.emit("sync_board_state", "wait for players");
   });
 
+  Socket.on("rematch_req",()=>{
+    board_states[assigned_room]=new Array(9).fill(null)
+    winner=false
+    io.to(assigned_room).emit(
+      "sync_board_state",
+      board_states[assigned_room],
+      winner,
+      symbol
+    );
+  })
+
   Socket.on("update_players", (player_name, room_id, symbol_selected) => {
     if (available_players.length !== 0) {
       console.log(room_id);
