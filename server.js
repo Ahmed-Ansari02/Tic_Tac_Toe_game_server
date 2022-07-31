@@ -60,10 +60,12 @@ io.on("connection", (Socket) => {
 
   Socket.on("disconnect", () => {
     console.log(Socket.id + " disconneted ");
+    Socket.broadcast.emit("Reset", true);
+    delete board_states[assigned_room];
     available_players = available_players.filter(
       (value) => value.room_id !== Socket.id
     );
-    console.log(available_players);
+    console.log(available_players,board_states);
     io.to(assigned_room).emit("Ready", false);
     io.emit("available_players", available_players);
   });
@@ -75,7 +77,8 @@ io.on("connection", (Socket) => {
       io.to(assigned_room).emit(
         "sync_board_state",
         board_states[assigned_room],
-        winner,symbol
+        winner,
+        symbol
       );
       console.log(board_states, winner, symbol);
 
