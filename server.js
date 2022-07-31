@@ -75,7 +75,7 @@ io.on("connection", (Socket) => {
       io.to(assigned_room).emit(
         "sync_board_state",
         board_states[assigned_room],
-        winner
+        winner,symbol
       );
       console.log(board_states, winner, symbol);
 
