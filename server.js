@@ -7,7 +7,7 @@ const app = express();
 const httpserver = createServer(app);
 const io = new Server(httpserver, {
   cors: {
-    origin: "*",
+    origin: "https://tic-tac-toe-game-react.vercel.app",
   },
 });
 
@@ -59,7 +59,7 @@ io.on("connection", (Socket) => {
 
   Socket.on("disconnect", () => {
     console.log(Socket.id + " disconneted ");
-    Socket.broadcast.emit("Reset", true);
+    Socket.to(assigned_room).emit("Reset", true);
     delete board_states[assigned_room];
     available_players = available_players.filter(
       (value) => value.room_id !== Socket.id
@@ -76,7 +76,10 @@ io.on("connection", (Socket) => {
       if (winner) {
         board_states[assigned_room]["winnings"][symbol] =
           board_states[assigned_room]["winnings"][symbol] + 1;
-          io.to(assigned_room).emit("score_count", board_states[assigned_room]["winnings"] )
+        io.to(assigned_room).emit(
+          "score_count",
+          board_states[assigned_room]["winnings"]
+        );
       }
       io.to(assigned_room).emit(
         "sync_board_state",
@@ -118,7 +121,10 @@ io.on("connection", (Socket) => {
       symbol = symbol_selected;
       Socket.to(assigned_room).emit("competitor_name", player_name);
       io.to(assigned_room).emit("Ready", true);
-      io.to(assigned_room).emit("score_count", board_states[assigned_room]["winnings"])
+      io.to(assigned_room).emit(
+        "score_count",
+        board_states[assigned_room]["winnings"]
+      );
       return;
     }
     available_players.push({
