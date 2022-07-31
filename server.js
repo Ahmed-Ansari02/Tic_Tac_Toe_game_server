@@ -111,6 +111,7 @@ io.on("connection", (Socket) => {
       available_players = available_players.filter(
         (value) => value.room_id !== room_id
       );
+      Socket.broadcast.emit("available_players", available_players);
       Socket.rooms.forEach((element) => {
         assigned_room = element;
       });
