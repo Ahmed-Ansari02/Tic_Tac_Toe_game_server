@@ -71,8 +71,11 @@ io.on("connection", (Socket) => {
 
   Socket.on("board_state_update", (id) => {
     if (io.sockets.adapter.rooms.get(assigned_room).size === 2) {
-      board_states[assigned_room][id] = symbol;
-      winner = calculate_winner(board_states[assigned_room]);
+      board_states[assigned_room][board][id] = symbol;
+      winner = calculate_winner(board_states[assigned_room][board]);
+      if (winner){
+        board_states[assigned_room][winnings][symbol]=board_states[assigned_room][winnings][symbol]+1
+      }
       io.to(assigned_room).emit(
         "sync_board_state",
         board_states[assigned_room],
@@ -87,7 +90,7 @@ io.on("connection", (Socket) => {
   });
 
   Socket.on("rematch_req",()=>{
-    board_states[assigned_room]=new Array(9).fill(null)
+    board_states[assigned_room].board=new Array(9).fill(null)
     winner=false
     io.to(assigned_room).emit(
       "sync_board_state",
@@ -99,7 +102,6 @@ io.on("connection", (Socket) => {
 
   Socket.on("update_players", (player_name, room_id, symbol_selected) => {
     if (available_players.length !== 0) {
-      console.log(room_id);
       Socket.join(room_id);
     }
 
@@ -124,7 +126,7 @@ io.on("connection", (Socket) => {
 
     Socket.rooms.forEach((element) => {
       assigned_room = element;
-      board_states[assigned_room] = new Array(9).fill(null);
+      board_states[assigned_room] = {board: new Array(9).fill(null), winnings:{"X":0, "O":0}}
       console.log("in room " + assigned_room);
     });
 
